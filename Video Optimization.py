@@ -15,7 +15,7 @@ class video_optimize:
     def __init__(self, input_file):
         self.video_in = input_file
         #Standardizing  output Video Format
-        self.video_out = input_file.rsplit('.',1)[0]  + 'out188.MP4'
+        self.video_out = input_file.rsplit('.',1)[0]  + 'out.MP4'
     # get resolution of the input video file
     def findVideoResolution(self):
         cmd = "ffprobe -v error -print_format json -show_streams"
