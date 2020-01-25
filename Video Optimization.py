@@ -44,7 +44,7 @@ class video_optimize:
         out_width, out_height = self.findVideoResolution()
         resolution =  str(out_width) + ':'  + str(out_height)
         input_fit  = {self.video_in:None}
-        output_fit = {self.video_out:'-n  -preset superfast -vcodec libx265 -tune animation  -maxrate 1M  -bufsize 2M -crf 28 -vf  "scale= %s, setdar=9/15" ' %resolution}
+        output_fit = {self.video_out:'-n  -preset ultrafast -vcodec libx265 -tune animation  -maxrate 2M  -bufsize 4M -crf 28 -vf  "scale= %s, setdar=9/15" ' %resolution}
         model = FFmpeg(inputs = input_fit, outputs= output_fit)
         print ("The command that's 'used for encoding this video is :: ", model.cmd)
         model.run()
