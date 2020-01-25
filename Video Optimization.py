@@ -15,8 +15,12 @@ class video_optimize:
     def __init__(self, input_file):
         self.video_in = input_file
         #Standardizing  output Video Format
-        self.video_out = input_file.rsplit('.',1)[0]  + 'out35.MP4'
-    # get resolution of the input video file
+        self.video_out = input_file.rsplit('.',1)[0]  + 'out.MP4'
+        
+#######################################################
+        ''''  Getting resolution of the origin video file by FFprobe command line
+            produce 25 percent shrinked  resolution for the output file '''
+#######################################################   
     def findVideoResolution(self):
         cmd = "ffprobe -v error -print_format json -show_streams"
         args = shlex.split(cmd)
@@ -31,21 +35,24 @@ class video_optimize:
         print(width, height)
         #Return Optimized  Video Resolution
         return width , height
-     #Optimization FFmpeg Command  method   
+    
+#######################################################
+        '''Optimization Function :: speccify the output video properties 
+            and fit it into FFmpeg command line '''
+#######################################################       
     def  optimize(self):
         out_width, out_height = self.findVideoResolution()
         resolution =  str(out_width) + ':'  + str(out_height)
         input_fit  = {self.video_in:None}
-        output_fit = {self.video_out:'-n  -preset ultrafast -vcodec libx265  -maxrate 1M  -bufsize 2M -crf 28 -vf  "scale= %s, setdar=9/15" ' %resolution}
+        output_fit = {self.video_out:'-n  -preset superfast -vcodec libx265 -tune animation  -maxrate 1M  -bufsize 2M -crf 28 -vf  "scale= %s, setdar=9/15" ' %resolution}
         model = FFmpeg(inputs = input_fit, outputs= output_fit)
-        print ('The command used for encoding this video is :: ', model.cmd)
+        print ("The command that's 'used for encoding this video is :: ", model.cmd)
         model.run()
         print("All 's Done!")
 
 #######################################################
         ##Function Call
 #######################################################
-
 input_file = input('Enter The Original Video.*its format* :: ')
 call =video_optimize(input_file)
 call.optimize()
